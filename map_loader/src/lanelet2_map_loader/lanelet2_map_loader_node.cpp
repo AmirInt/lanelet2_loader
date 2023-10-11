@@ -54,23 +54,19 @@ Lanelet2MapLoaderNode::Lanelet2MapLoaderNode(const rclcpp::NodeOptions & options
 {
   const auto adaptor = component_interface_utils::NodeAdaptor(this);
 
-  // subscription
-  adaptor.init_sub(
-    sub_map_projector_info_,
-    [this](const MapProjectorInfo::Message::ConstSharedPtr msg) { on_map_projector_info(msg); });
-
   declare_parameter("lanelet2_map_path", "");
   declare_parameter("center_line_resolution", 5.0);
+
+  on_map_projector_info();
 }
 
-void Lanelet2MapLoaderNode::on_map_projector_info(
-  const MapProjectorInfo::Message::ConstSharedPtr msg)
+void Lanelet2MapLoaderNode::on_map_projector_info()
 {
   const auto lanelet2_filename = get_parameter("lanelet2_map_path").as_string();
   const auto center_line_resolution = get_parameter("center_line_resolution").as_double();
 
   // load map from file
-  const auto map = load_map(lanelet2_filename, *msg);
+  const auto map = load_map(lanelet2_filename);
   if (!map) {
     return;
   }
@@ -88,43 +84,34 @@ void Lanelet2MapLoaderNode::on_map_projector_info(
 }
 
 lanelet::LaneletMapPtr Lanelet2MapLoaderNode::load_map(
-  const std::string & lanelet2_filename,
-  const tier4_map_msgs::msg::MapProjectorInfo & projector_info)
+  const std::string & lanelet2_filename)
 {
   lanelet::ErrorMessages errors{};
-  if (projector_info.projector_type != tier4_map_msgs::msg::MapProjectorInfo::LOCAL) {
-    std::unique_ptr<lanelet::Projector> projector =
-      geography_utils::get_lanelet2_projector(projector_info);
-    const lanelet::LaneletMapPtr map = lanelet::load(lanelet2_filename, *projector, &errors);
-    if (errors.empty()) {
-      return map;
-    }
-  } else {
-    // Use MGRSProjector as parser
-    lanelet::projection::MGRSProjector projector{};
-    const lanelet::LaneletMapPtr map = lanelet::load(lanelet2_filename, projector, &errors);
+  
+  // Use MGRSProjector as parser
+  lanelet::projection::MGRSProjector projector{};
+  const lanelet::LaneletMapPtr map = lanelet::load(lanelet2_filename, projector, &errors);
 
-    // overwrite local_x, local_y
-    for (lanelet::Point3d point : map->pointLayer) {
-      if (point.hasAttribute("local_x")) {
-        point.x() = point.attribute("local_x").asDouble().value();
-      }
-      if (point.hasAttribute("local_y")) {
-        point.y() = point.attribute("local_y").asDouble().value();
-      }
+  // overwrite local_x, local_y
+  for (lanelet::Point3d point : map->pointLayer) {
+    if (point.hasAttribute("local_x")) {
+      point.x() = point.attribute("local_x").asDouble().value();
     }
-
-    // realign lanelet borders using updated points
-    for (lanelet::Lanelet lanelet : map->laneletLayer) {
-      auto left = lanelet.leftBound();
-      auto right = lanelet.rightBound();
-      std::tie(left, right) = lanelet::geometry::align(left, right);
-      lanelet.setLeftBound(left);
-      lanelet.setRightBound(right);
+    if (point.hasAttribute("local_y")) {
+      point.y() = point.attribute("local_y").asDouble().value();
     }
-
-    return map;
   }
+
+  // realign lanelet borders using updated points
+  for (lanelet::Lanelet lanelet : map->laneletLayer) {
+    auto left = lanelet.leftBound();
+    auto right = lanelet.rightBound();
+    std::tie(left, right) = lanelet::geometry::align(left, right);
+    lanelet.setLeftBound(left);
+    lanelet.setRightBound(right);
+  }
+
+  return map;
 
   for (const auto & error : errors) {
     RCLCPP_ERROR_STREAM(rclcpp::get_logger("map_loader"), error);
