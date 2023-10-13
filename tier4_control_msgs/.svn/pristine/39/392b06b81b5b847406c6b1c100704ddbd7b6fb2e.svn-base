@@ -1,4 +1,0 @@
-bool stop
-string request_source
----
-autoware_common_msgs/ResponseStatus status
