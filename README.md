@@ -6,6 +6,7 @@ This package provides the features of loading lanelet2 maps onto RViz.
 
 First clone the following packages into the `src` directory of your ROS2 workspace:
 - [autoware_auto_msgs](https://github.com/tier4/autoware_auto_msgs)
+- [autoware_adapi_msgs](https://github.com/autowarefoundation/autoware_adapi_msgs)
 - [autoware_common](https://github.com/autowarefoundation/autoware_common)
 - [minimal_autoware_msgs](https://github.com/AmirInt/minimal_autoware_msgs)
 - [minimal_tier4_autoware_msgs](https://github.com/AmirInt/minimal_tier4_autoware_msgs)
