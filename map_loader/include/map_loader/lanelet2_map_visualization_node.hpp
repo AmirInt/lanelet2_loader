@@ -34,6 +34,8 @@ private:
 
   bool viz_lanelets_centerline_;
 
+  std::vector<double> map_offset_;
+
   void onMapBin(const autoware_auto_mapping_msgs::msg::HADMapBin::ConstSharedPtr msg);
 };
 

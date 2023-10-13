@@ -73,6 +73,8 @@ Lanelet2MapVisualizationNode::Lanelet2MapVisualizationNode(const rclcpp::NodeOpt
 
   viz_lanelets_centerline_ = this->declare_parameter("viz_lanelets_centerline", true);
 
+  map_offset_ = this->declare_parameter<>("map_offset", std::vector<double>());
+
   sub_map_bin_ = this->create_subscription<autoware_auto_mapping_msgs::msg::HADMapBin>(
     "input/lanelet2_map", rclcpp::QoS{1}.transient_local(),
     std::bind(&Lanelet2MapVisualizationNode::onMapBin, this, _1));
@@ -243,7 +245,9 @@ void Lanelet2MapVisualizationNode::onMapBin(
     lanelet::visualization::noParkingAreasAsMarkerArray(no_parking_reg_elems, cl_no_parking_areas));
 
   for (auto& marker : map_marker_array.markers) {
-    marker.pose.position.z -= 20;
+    marker.pose.position.x += map_offset_[0];
+    marker.pose.position.y += map_offset_[1];
+    marker.pose.position.z += map_offset_[2];
   }
 
   pub_marker_->publish(map_marker_array);
