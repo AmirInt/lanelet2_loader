@@ -74,13 +74,22 @@ Lanelet2MapVisualizationNode::Lanelet2MapVisualizationNode(const rclcpp::NodeOpt
   viz_lanelets_centerline_ = this->declare_parameter("viz_lanelets_centerline", true);
 
   map_offset_ = this->declare_parameter<>("map_offset", std::vector<double>());
+ 
+  publish_topic_ = this->declare_parameter<>("publish_topic", "/lanelet2");
 
   sub_map_bin_ = this->create_subscription<autoware_auto_mapping_msgs::msg::HADMapBin>(
     "input/lanelet2_map", rclcpp::QoS{1}.transient_local(),
     std::bind(&Lanelet2MapVisualizationNode::onMapBin, this, _1));
 
   pub_marker_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
-    "output/lanelet2_map_marker", rclcpp::QoS{1}.transient_local());
+    publish_topic_, rclcpp::QoS{1}.transient_local());
+}
+
+void Lanelet2MapVisualizationNode::waitForSubscriber()
+{
+    using namespace std::chrono_literals;
+    while (this->count_subscribers(publish_topic_) == 0)
+        rclcpp::sleep_for(200ms);
 }
 
 void Lanelet2MapVisualizationNode::onMapBin(
@@ -249,6 +258,8 @@ void Lanelet2MapVisualizationNode::onMapBin(
     marker.pose.position.y += map_offset_[1];
     marker.pose.position.z += map_offset_[2];
   }
+
+  waitForSubscriber();
 
   pub_marker_->publish(map_marker_array);
 }

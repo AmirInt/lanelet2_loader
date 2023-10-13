@@ -36,6 +36,10 @@ private:
 
   std::vector<double> map_offset_;
 
+  std::string publish_topic_;
+
+  void waitForSubscriber();
+
   void onMapBin(const autoware_auto_mapping_msgs::msg::HADMapBin::ConstSharedPtr msg);
 };
 
