@@ -46,7 +46,6 @@ private:
 
   void on_map_projector_info();
 
-  component_interface_utils::Subscription<MapProjectorInfo>::SharedPtr sub_map_projector_info_;
   rclcpp::Publisher<HADMapBin>::SharedPtr pub_map_bin_;
 };
 

@@ -242,6 +242,10 @@ void Lanelet2MapVisualizationNode::onMapBin(
     &map_marker_array,
     lanelet::visualization::noParkingAreasAsMarkerArray(no_parking_reg_elems, cl_no_parking_areas));
 
+  for (auto& marker : map_marker_array.markers) {
+    marker.pose.position.z -= 20;
+  }
+
   pub_marker_->publish(map_marker_array);
 }
 
