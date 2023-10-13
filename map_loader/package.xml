@@ -4,10 +4,7 @@
   <name>map_loader</name>
   <version>0.1.0</version>
   <description>The map_loader package</description>
-  <maintainer email="ryohsuke.mitsudome@tier4.jp">Ryohsuke Mitsudome</maintainer>
-  <maintainer email="ryu.yamamoto@tier4.jp">Ryu Yamamoto</maintainer>
-  <maintainer email="koji.minoda@tier4.jp">Koji Minoda</maintainer>
-  <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>
+  <maintainer email="amir.intelli@gmail.com">AmirInt</maintainer>
 
   <license>Apache License 2.0</license>
 
