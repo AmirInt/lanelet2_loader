@@ -27,7 +27,7 @@ colcon build
 
 ## Run
 
-Source you ROS2 workspace.
+Source your ROS2 workspace.
 
 Use the following command.
 
