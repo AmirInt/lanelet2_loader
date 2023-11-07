@@ -13,12 +13,13 @@ Tools for loading lanelet2 maps onto RViz.
 
 ## Build
 
-First clone the dependency packages into the `src` directory of your ROS2 workspace.
+Clone the dependency packages into the `src` directory of your ROS2 workspace.
 
 Then, from the root of your ROS2 workspace, to install ROS2 and system dependencies, run (ensure you have previously installed and initialised [rosdep](https://docs.ros.org/en/humble/Tutorials/Intermediate/Rosdep.html#how-do-i-use-the-rosdep-tool)):
 ```
 rosdep install --from-paths src -y --ignore-src
 ```
+
 Finally, build via:
 ```
 colcon build
@@ -26,6 +27,8 @@ colcon build
 
 ## Run
 
-To run the whole package, use the provided launch file.
+Source you ROS2 workspace.
+
+Use the following command.
 
 `ros2 run map_loader lanelet2_map_loader --ros-args -p lanelet2_map_path:=path/to/map.osm`
