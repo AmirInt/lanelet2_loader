@@ -4,9 +4,9 @@ Tools for loading lanelet2 maps onto RViz.
 
 ## Dependencies
 
-- [autoware_auto_msgs](https://github.com/tier4/autoware_auto_msgs)
-- [autoware_adapi_msgs](https://github.com/autowarefoundation/autoware_adapi_msgs)
-- [autoware_common](https://github.com/autowarefoundation/autoware_common)
+- [autoware_auto_msgs](https://github.com/AmirInt/autoware_auto_msgs)
+- [autoware_adapi_msgs](https://github.com/AmirInt/autoware_adapi_msgs)
+- [autoware_common](https://github.com/AmirInt/autoware_common)
 - [minimal_autoware_msgs](https://github.com/AmirInt/minimal_autoware_msgs)
 - [minimal_tier4_autoware_msgs](https://github.com/AmirInt/minimal_tier4_autoware_msgs)
 
